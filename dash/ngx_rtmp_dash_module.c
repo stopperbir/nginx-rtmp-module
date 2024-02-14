@@ -287,8 +287,8 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          bandwidth=\"%ui\">\n"                                           \
     "        <SegmentTemplate\n"                                               \
     "            timescale=\"1000\"\n"                                         \
-    "            media=\"%V%s$Time$.js\"\n"                                   \
-    "            initialization=\"%V%sinit.js\">\n"                           \
+    "            media=\"%V%s$Time$.m4v\"\n"                                   \
+    "            initialization=\"%V%sinit.m4v\">\n"                           \
     "          <SegmentTimeline>\n"
 
 
@@ -320,8 +320,8 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          bandwidth=\"%ui\">\n"                                           \
     "        <SegmentTemplate\n"                                               \
     "            timescale=\"1000\"\n"                                         \
-    "            media=\"%V%s$Time$.css\"\n"                                   \
-    "            initialization=\"%V%sinit.css\">\n"                           \
+    "            media=\"%V%s$Time$.m4a\"\n"                                   \
+    "            initialization=\"%V%sinit.m4a\">\n"                           \
     "          <SegmentTimeline>\n"
 
 
@@ -464,7 +464,7 @@ ngx_rtmp_dash_write_init_segments(ngx_rtmp_session_t *s)
 
     /* init video */
 
-    *ngx_sprintf(ctx->stream.data + ctx->stream.len, "init.js") = 0;
+    *ngx_sprintf(ctx->stream.data + ctx->stream.len, "init.m4v") = 0;
 
     fd = ngx_open_file(ctx->stream.data, NGX_FILE_RDWR, NGX_FILE_TRUNCATE,
                        NGX_FILE_DEFAULT_ACCESS);
@@ -492,7 +492,7 @@ ngx_rtmp_dash_write_init_segments(ngx_rtmp_session_t *s)
 
     /* init audio */
 
-    *ngx_sprintf(ctx->stream.data + ctx->stream.len, "init.css") = 0;
+    *ngx_sprintf(ctx->stream.data + ctx->stream.len, "init.m4a") = 0;
 
     fd = ngx_open_file(ctx->stream.data, NGX_FILE_RDWR, NGX_FILE_TRUNCATE,
                        NGX_FILE_DEFAULT_ACCESS);
