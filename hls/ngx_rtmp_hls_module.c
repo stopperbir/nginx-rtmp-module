@@ -1576,9 +1576,9 @@ ngx_rtmp_hls_update_fragment(ngx_rtmp_session_t *s, uint64_t ts,
     force = 0;
     discont = 1;
 
-    if (ctx->opened) {
-        f = ngx_rtmp_hls_get_frag(s, ctx->nfrags);
-        d = (int64_t) (ts - ctx->frag_ts);
+    //if (ctx->opened) {
+        //f = ngx_rtmp_hls_get_frag(s, ctx->nfrags);
+        //d = (int64_t) (ts - ctx->frag_ts);
 
         //if (d > (int64_t) hacf->max_fraglen * 90 || d < -90000) {
             //ngx_log_error(NGX_LOG_ERR, s->connection->log, 0,
@@ -1587,10 +1587,10 @@ ngx_rtmp_hls_update_fragment(ngx_rtmp_session_t *s, uint64_t ts,
 			//discont = 0;
 
         //} else {
-            f->duration = (ts - ctx->frag_ts) / 90000.;
-            discont = 0;
+            //f->duration = (ts - ctx->frag_ts) / 90000.;
+            //discont = 0;
         //}
-    }
+    //}
 
     switch (hacf->slicing) {
         case NGX_RTMP_HLS_SLICING_PLAIN:
