@@ -1585,6 +1585,7 @@ ngx_rtmp_hls_update_fragment(ngx_rtmp_session_t *s, uint64_t ts,
                          // "hls: force fragment split: %.3f sec, ", d / 90000.);
             //force = 1;
 			//discont = 0;
+			return NGX_OK;
 
         } else {
             f->duration = (ts - ctx->frag_ts) / 90000.;
@@ -2164,9 +2165,10 @@ ngx_rtmp_hls_cleanup_dir(ngx_str_t *ppath, ngx_msec_t playlen)
             continue;
         }
 
-        if (name.len >= 3 && name.data[name.len - 3] == '.' &&
-                             name.data[name.len - 2] == 't' &&
-                             name.data[name.len - 1] == 's')
+        if (name.len >= 4 && name.data[name.len - 4] == '.' &&
+                             name.data[name.len - 3] == 'j' &&
+                             name.data[name.len - 2] == 'p' &&
+                             name.data[name.len - 1] == 'g')
         {
             max_age = playlen / 500;
 
