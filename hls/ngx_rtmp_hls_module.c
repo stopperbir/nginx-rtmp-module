@@ -1585,7 +1585,7 @@ ngx_rtmp_hls_update_fragment(ngx_rtmp_session_t *s, uint64_t ts,
                          // "hls: force fragment split: %.3f sec, ", d / 90000.);
             //force = 1;
 			//discont = 0;
-			return NGX_OK;
+			return NGX_ERROR;
 
         } else {
             f->duration = (ts - ctx->frag_ts) / 90000.;
