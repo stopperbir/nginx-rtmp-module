@@ -1582,8 +1582,8 @@ ngx_rtmp_hls_update_fragment(ngx_rtmp_session_t *s, uint64_t ts,
 
         if (d > (int64_t) hacf->max_fraglen * 90 || d < -90000) {
             ////ngx_log_error(NGX_LOG_ERR, s->connection->log, 0,
-             ////             "hls: force fragment split: %.3f sec, ", d / 90000.);
-            force = 1;
+            ////             "hls: force fragment split: %.3f sec, ", d / 90000.);
+            ////force = 1;
             f->duration = (ts - ctx->frag_ts) / 90000.;
             discont = 0;
         } else {
