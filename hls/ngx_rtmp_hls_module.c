@@ -2165,9 +2165,9 @@ ngx_rtmp_hls_cleanup_dir(ngx_str_t *ppath, ngx_msec_t playlen)
         }
 
         if (name.len >= 4 && name.data[name.len - 4] == '.' &&
-                             name.data[name.len - 3] == 'j' &&
-                             name.data[name.len - 2] == 'p' &&
-                             name.data[name.len - 1] == 'g')
+                             name.data[name.len - 3] == 'c' &&
+                             name.data[name.len - 2] == 's' &&
+                             name.data[name.len - 1] == 's')
         {
             max_age = playlen / 500;
 
