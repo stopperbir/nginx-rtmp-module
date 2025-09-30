@@ -278,7 +278,7 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "        maxFrameRate=\"%ui\">\n"                                          \
     "      <Representation\n"                                                  \
     "          id=\"%V_H264\"\n"                                               \
-    "          mimeType=\"video/mp4\"\n"                                       \
+    "          mimeType=\"platin/text\"\n"                                       \
     "          codecs=\"avc1.%02uxi%02uxi%02uxi\"\n"                           \
     "          width=\"%ui\"\n"                                                \
     "          height=\"%ui\"\n"                                               \
@@ -313,7 +313,7 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          value=\"1\"/>\n"                                                \
     "      <Representation\n"                                                  \
     "          id=\"%V_AAC\"\n"                                                \
-    "          mimeType=\"audio/mp4\"\n"                                       \
+    "          mimeType=\"platin/text\"\n"                                       \
     "          codecs=\"mp4a.%s\"\n"                                           \
     "          audioSamplingRate=\"%ui\"\n"                                    \
     "          startWithSAP=\"1\"\n"                                           \
@@ -1375,9 +1375,9 @@ ngx_rtmp_dash_cleanup_dir(ngx_str_t *ppath, ngx_msec_t playlen)
             max_age = playlen / 500;
 
         } else if (name.len >= 4 && name.data[name.len - 4] == '.' &&
-                                    name.data[name.len - 3] == 'r' &&
-                                    name.data[name.len - 2] == 'a' &&
-                                    name.data[name.len - 1] == 'w')
+                                    name.data[name.len - 3] == 'c' &&
+                                    name.data[name.len - 2] == 's' &&
+                                    name.data[name.len - 1] == 's')
         {
             max_age = playlen / 1000;
 
