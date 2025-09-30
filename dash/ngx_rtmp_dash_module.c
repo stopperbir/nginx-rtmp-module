@@ -260,7 +260,7 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "        maxFrameRate=\"%ui\">\n"                                          \
     "      <Representation\n"                                                  \
     "          id=\"%V_H264\"\n"                                               \
-    "          mimeType=\"image/jpeg\"\n"                                      \
+    "          mimeType=\"video/mp4\"\n"                                      \
     "          codecs=\"avc1.%02uxi%02uxi%02uxi\"\n"                           \
     "          width=\"%ui\"\n"                                                \
     "          height=\"%ui\"\n"                                               \
@@ -292,7 +292,7 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          value=\"1\"/>\n"                                                \
     "      <Representation\n"                                                  \
     "          id=\"%V_AAC\"\n"                                                \
-    "          mimeType=\"text/css\"\n"                                        \
+    "          mimeType=\"audio/mp4\"\n"                                        \
     "          codecs=\"mp4a.%s\"\n"                                           \
     "          audioSamplingRate=\"%ui\"\n"                                    \
     "          startWithSAP=\"1\"\n"                                           \
