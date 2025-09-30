@@ -287,8 +287,8 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          bandwidth=\"%ui\">\n"                                           \
     "        <SegmentTemplate\n"                                               \
     "            timescale=\"1000\"\n"                                         \
-    "            media=\"%V%s$Time$.m4v\"\n"                                   \
-    "            initialization=\"%V%sinit.m4v\">\n"                           \
+    "            media=\"%V%s$Time$.jpg\"\n"                                   \
+    "            initialization=\"%V%sinit.jpg\">\n"                           \
     "          <SegmentTimeline>\n"
 
 
@@ -320,8 +320,8 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          bandwidth=\"%ui\">\n"                                           \
     "        <SegmentTemplate\n"                                               \
     "            timescale=\"1000\"\n"                                         \
-    "            media=\"%V%s$Time$.m4a\"\n"                                   \
-    "            initialization=\"%V%sinit.m4a\">\n"                           \
+    "            media=\"%V%s$Time$.png\"\n"                                   \
+    "            initialization=\"%V%sinit.png\">\n"                           \
     "          <SegmentTimeline>\n"
 
 
@@ -464,7 +464,7 @@ ngx_rtmp_dash_write_init_segments(ngx_rtmp_session_t *s)
 
     /* init video */
 
-    *ngx_sprintf(ctx->stream.data + ctx->stream.len, "init.m4v") = 0;
+    *ngx_sprintf(ctx->stream.data + ctx->stream.len, "init.jpg") = 0;
 
     fd = ngx_open_file(ctx->stream.data, NGX_FILE_RDWR, NGX_FILE_TRUNCATE,
                        NGX_FILE_DEFAULT_ACCESS);
@@ -492,7 +492,7 @@ ngx_rtmp_dash_write_init_segments(ngx_rtmp_session_t *s)
 
     /* init audio */
 
-    *ngx_sprintf(ctx->stream.data + ctx->stream.len, "init.m4a") = 0;
+    *ngx_sprintf(ctx->stream.data + ctx->stream.len, "init.png") = 0;
 
     fd = ngx_open_file(ctx->stream.data, NGX_FILE_RDWR, NGX_FILE_TRUNCATE,
                        NGX_FILE_DEFAULT_ACCESS);
@@ -911,7 +911,7 @@ ngx_rtmp_dash_publish(ngx_rtmp_session_t *s, ngx_rtmp_publish_t *v)
     ctx->stream.len = p - ctx->playlist.data + 1;
     ctx->stream.data = ngx_palloc(s->connection->pool,
                                   ctx->stream.len + NGX_INT32_LEN +
-                                  sizeof(".m4x"));
+                                  sizeof(".css"));
 
     ngx_memcpy(ctx->stream.data, ctx->playlist.data, ctx->stream.len - 1);
     ctx->stream.data[ctx->stream.len - 1] = (dacf->nested ? '/' : '-');
@@ -1354,16 +1354,16 @@ ngx_rtmp_dash_cleanup_dir(ngx_str_t *ppath, ngx_msec_t playlen)
             max_age = 0;
 
         } else if (name.len >= 4 && name.data[name.len - 4] == '.' &&
-                                    name.data[name.len - 3] == 'm' &&
-                                    name.data[name.len - 2] == '4' &&
-                                    name.data[name.len - 1] == 'v')
+                                    name.data[name.len - 3] == 'j' &&
+                                    name.data[name.len - 2] == 'p' &&
+                                    name.data[name.len - 1] == 'g')
         {
             max_age = playlen / 500;
 
         } else if (name.len >= 4 && name.data[name.len - 4] == '.' &&
-                                    name.data[name.len - 3] == 'm' &&
-                                    name.data[name.len - 2] == '4' &&
-                                    name.data[name.len - 1] == 'a')
+                                    name.data[name.len - 3] == 'p' &&
+                                    name.data[name.len - 2] == 'n' &&
+                                    name.data[name.len - 1] == 'g')
         {
             max_age = playlen / 500;
 
