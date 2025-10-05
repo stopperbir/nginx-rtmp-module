@@ -266,6 +266,7 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          height=\"%ui\"\n"                                               \
     "          frameRate=\"%ui\"\n"                                            \
     "          startWithSAP=\"1\"\n"                                           \
+    "          bandwidth=\"%ui\">\n"                                           \
     "        <SegmentTemplate\n"                                               \
     "            timescale=\"1000\"\n"                                         \
     "            media=\"%V%s$Time$.jpg\"\n"                                   \
@@ -295,6 +296,7 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          codecs=\"mp4a.%s\"\n"                                           \
     "          audioSamplingRate=\"%ui\"\n"                                    \
     "          startWithSAP=\"1\"\n"                                           \
+    "          bandwidth=\"%ui\">\n"                                           \
     "        <SegmentTemplate\n"                                               \
     "            timescale=\"1000\"\n"                                         \
     "            media=\"%V%s$Time$.css\"\n"                                   \
@@ -346,21 +348,80 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     name = (dacf->nested ? &noname : &ctx->name);
     sep = (dacf->nested ? "" : "-");
 
-    if (ctx->has_video) {
-        p = ngx_slprintf(buffer, last, NGX_RTMP_DASH_MANIFEST_VIDEO,
-                         codec_ctx->width,
-                         codec_ctx->height,
-                         codec_ctx->frame_rate,
-                         &ctx->name,
-                         codec_ctx->avc_profile,
-                         codec_ctx->avc_compat,
-                         codec_ctx->avc_level,
-                         codec_ctx->width,
-                         codec_ctx->height,
-                         codec_ctx->frame_rate,
-                         (ngx_uint_t) (codec_ctx->video_data_rate * 1000),
-                         name, sep,
-                         name, sep);
+if (ctx->has_video) {
+ngx_uint_t video_bitrate = (ngx_uint_t)(codec_ctx->video_data_rate * 1000);
+
+if (video_bitrate > 0) {
+    p = ngx_slprintf(buffer, last,
+        "    <AdaptationSet\n"
+        "        id=\"1\"\n"
+        "        segmentAlignment=\"true\"\n"
+        "        maxWidth=\"%ui\"\n"
+        "        maxHeight=\"%ui\"\n"
+        "        maxFrameRate=\"%ui\">\n"
+        "      <Representation\n"
+        "          id=\"%V_H264\"\n"
+        "          mimeType=\"video/mp4\"\n"
+        "          codecs=\"avc1.%02uxi%02uxi%02uxi\"\n"
+        "          width=\"%ui\"\n"
+        "          height=\"%ui\"\n"
+        "          frameRate=\"%ui\"\n"
+        "          startWithSAP=\"1\"\n"
+        "          bandwidth=\"%ui\">\n"
+        "        <SegmentTemplate\n"
+        "            timescale=\"1000\"\n"
+        "            media=\"%V%s$Time$.jpg\"\n"
+        "            initialization=\"%V%sinit.jpg\">\n"
+        "          <SegmentTimeline>\n",
+        codec_ctx->width,
+        codec_ctx->height,
+        codec_ctx->frame_rate,
+        &ctx->name,
+        codec_ctx->avc_profile,
+        codec_ctx->avc_compat,
+        codec_ctx->avc_level,
+        codec_ctx->width,
+        codec_ctx->height,
+        codec_ctx->frame_rate,
+        video_bitrate,
+        name, sep,
+        name, sep);
+} else {
+    // bandwidth satırı olmayan versiyon
+    p = ngx_slprintf(buffer, last,
+        "    <AdaptationSet\n"
+        "        id=\"1\"\n"
+        "        segmentAlignment=\"true\"\n"
+        "        maxWidth=\"%ui\"\n"
+        "        maxHeight=\"%ui\"\n"
+        "        maxFrameRate=\"%ui\">\n"
+        "      <Representation\n"
+        "          id=\"%V_H264\"\n"
+        "          mimeType=\"video/mp4\"\n"
+        "          codecs=\"avc1.%02uxi%02uxi%02uxi\"\n"
+        "          width=\"%ui\"\n"
+        "          height=\"%ui\"\n"
+        "          frameRate=\"%ui\"\n"
+        "          startWithSAP=\"1\">\n"
+        "        <SegmentTemplate\n"
+        "            timescale=\"1000\"\n"
+        "            media=\"%V%s$Time$.jpg\"\n"
+        "            initialization=\"%V%sinit.jpg\">\n"
+        "          <SegmentTimeline>\n",
+        codec_ctx->width,
+        codec_ctx->height,
+        codec_ctx->frame_rate,
+        &ctx->name,
+        codec_ctx->avc_profile,
+        codec_ctx->avc_compat,
+        codec_ctx->avc_level,
+        codec_ctx->width,
+        codec_ctx->height,
+        codec_ctx->frame_rate,
+        name, sep,
+        name, sep);
+}
+
 
         for (i = 0; i < ctx->nfrags; i++) {
             f = ngx_rtmp_dash_get_frag(s, i);
@@ -374,14 +435,62 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     }
 
     if (ctx->has_audio) {
-        p = ngx_slprintf(buffer, last, NGX_RTMP_DASH_MANIFEST_AUDIO,
-                         &ctx->name,
-                         codec_ctx->audio_codec_id == NGX_RTMP_AUDIO_AAC ?
-                         (codec_ctx->aac_sbr ? "40.5" : "40.2") : "6b",
-                         codec_ctx->sample_rate,
-                         (ngx_uint_t) (codec_ctx->audio_data_rate * 1000),
-                         name, sep,
-                         name, sep);
+ngx_uint_t audio_bitrate = (ngx_uint_t)(codec_ctx->audio_data_rate * 1000);
+
+if (audio_bitrate > 0) {
+    p = ngx_slprintf(buffer, last,
+        "    <AdaptationSet\n"
+        "        id=\"2\"\n"
+        "        segmentAlignment=\"true\">\n"
+        "      <AudioChannelConfiguration\n"
+        "          schemeIdUri=\"urn:mpeg:dash:23003:3:audio_channel_configuration:2011\"\n"
+        "          value=\"1\"/>\n"
+        "      <Representation\n"
+        "          id=\"%V_AAC\"\n"
+        "          mimeType=\"audio/mp4\"\n"
+        "          codecs=\"mp4a.%s\"\n"
+        "          audioSamplingRate=\"%ui\"\n"
+        "          startWithSAP=\"1\"\n"
+        "          bandwidth=\"%ui\">\n"
+        "        <SegmentTemplate\n"
+        "            timescale=\"1000\"\n"
+        "            media=\"%V%s$Time$.css\"\n"
+        "            initialization=\"%V%sinit.css\">\n"
+        "          <SegmentTimeline>\n",
+        &ctx->name,
+        codec_ctx->audio_codec_id == NGX_RTMP_AUDIO_AAC ?
+            (codec_ctx->aac_sbr ? "40.5" : "40.2") : "6b",
+        codec_ctx->sample_rate,
+        audio_bitrate,
+        name, sep,
+        name, sep);
+} else {
+    p = ngx_slprintf(buffer, last,
+        "    <AdaptationSet\n"
+        "        id=\"2\"\n"
+        "        segmentAlignment=\"true\">\n"
+        "      <AudioChannelConfiguration\n"
+        "          schemeIdUri=\"urn:mpeg:dash:23003:3:audio_channel_configuration:2011\"\n"
+        "          value=\"1\"/>\n"
+        "      <Representation\n"
+        "          id=\"%V_AAC\"\n"
+        "          mimeType=\"audio/mp4\"\n"
+        "          codecs=\"mp4a.%s\"\n"
+        "          audioSamplingRate=\"%ui\"\n"
+        "          startWithSAP=\"1\">\n"
+        "        <SegmentTemplate\n"
+        "            timescale=\"1000\"\n"
+        "            media=\"%V%s$Time$.css\"\n"
+        "            initialization=\"%V%sinit.css\">\n"
+        "          <SegmentTimeline>\n",
+        &ctx->name,
+        codec_ctx->audio_codec_id == NGX_RTMP_AUDIO_AAC ?
+            (codec_ctx->aac_sbr ? "40.5" : "40.2") : "6b",
+        codec_ctx->sample_rate,
+        name, sep,
+        name, sep);
+}
+
 
         for (i = 0; i < ctx->nfrags; i++) {
             f = ngx_rtmp_dash_get_frag(s, i);
