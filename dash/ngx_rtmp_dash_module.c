@@ -266,7 +266,6 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          height=\"%ui\"\n"                                               \
     "          frameRate=\"%ui\"\n"                                            \
     "          startWithSAP=\"1\"\n"                                           \
-    "          bandwidth=\"%ui\">\n"                                           \
     "        <SegmentTemplate\n"                                               \
     "            timescale=\"1000\"\n"                                         \
     "            media=\"%V%s$Time$.jpg\"\n"                                   \
@@ -296,7 +295,6 @@ ngx_rtmp_dash_write_playlist(ngx_rtmp_session_t *s)
     "          codecs=\"mp4a.%s\"\n"                                           \
     "          audioSamplingRate=\"%ui\"\n"                                    \
     "          startWithSAP=\"1\"\n"                                           \
-    "          bandwidth=\"%ui\">\n"                                           \
     "        <SegmentTemplate\n"                                               \
     "            timescale=\"1000\"\n"                                         \
     "            media=\"%V%s$Time$.css\"\n"                                   \
